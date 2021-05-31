@@ -1,0 +1,192 @@
+/* General */
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+body {
+    position: relative;
+    min-height: 100%;
+}
+
+.footer {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    height: 80px;
+}
+
+/* Navbar */
+.navbar-toggler-icon { background-image: url('../img/icons/hamburger.png'); }
+.nav-item > a > h5:hover { color: #dee2e6; transition: all .1s ease; }
+
+#menu button {
+    background: none;
+    color: white;
+    border: none;
+    outline: none;
+    font-size: 1.25rem;
+}
+
+/* Forms */
+textarea { resize: none; height: 10em; }
+.todo-textarea { resize: none; height: 25em; }
+#changePassForm, #dbForm, #postForm, #configForm, #passwordForm, #todoForm
+{ display: none; }
+.invalid { border-color: red !important; border-width: 2px !important;}
+.btn-submit {
+    color: white;
+    background-color: #191a1b;
+    font-size: 20px;
+    border-radius: 5px;
+    border: 2px solid #191a1b;
+    cursor: pointer;
+}
+.btn-submit:hover {
+    color: #191a1b;
+    background-color: white;
+    transition: all .15s ease;
+}
+
+/* Custom-often */
+.bg-black { background-color: #191a1b; }
+.h-40px { height: 40px; }
+.nounderline { text-decoration: none !important; }
+.letter-spacing-3px { letter-spacing: 3px !important; }
+.break-word { word-wrap: break-word; }
+
+.font-inconsolata { font-family: 'Inconsolata', monospace; }
+.font-teko { font-family: 'Teko', sans-serif; }
+.font-staatliches { font-family: 'Staatliches', cursive; }
+.font-baloo { font-family: 'Baloo Bhai', cursive; }
+.font-pangolin { font-family: 'Pangolin', cursive; }
+.font-source { font-family: 'Source Sans Pro', sans-serif; }
+.font-noto { font-family: 'Noto Sans', sans-serif; }
+
+.font-10 { font-size: 10px; }
+.font-13 { font-size: 13px; }
+.font-15 { font-size: 15px; }
+.font-17 { font-size: 17px; }
+.font-18 { font-size: 18px; }
+.font-20 { font-size: 20px; }
+.font-25 { font-size: 25px; }
+.font-35 { font-size: 35px; }
+
+.btn-outline-black { 
+    color: #191a1b;
+    border-color: #191a1b;
+    border-width: 2px;
+}
+
+.btn-outline-black:hover {
+    color: white;
+    background-color: #191a1b !important;
+}
+
+/* Custom */
+#admin-panel {
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+    z-index: 1;
+    opacity: 0.96;
+    text-align: center;
+    display: none;
+}
+#admin-navigation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+}
+#admin-navigation > div {
+    margin-left: 30px;
+    height: 55px;
+    position: relative;
+    text-align: left;
+}
+#admin-navigation > div > img {
+    position: absolute;
+    top: -8px;
+    left: 0;
+}
+#admin-navigation > div > button,
+#admin-navigation > div > a {
+    border: none !important;
+    outline: none !important;
+    color: white;
+    font-size: 20px;
+    font-family: 'Noto Sans', sans-serif;
+    transition: all .2s ease-in-out;
+    background-color: #343a40 !important;
+    margin-left: 45px;
+}
+#admin-navigation > div > button:hover, #admin-navigation > div > a:hover { color: #007bff; }
+#admin-navigation > h3 { color: white; text-align: center; }
+#admin-shadow {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    opacity: 0.5;
+    background-color: #000;
+}
+#admin-hide {
+    border: 2px solid black;
+    background-color: white;
+    padding: 15px 15px 10px 15px;
+    color: #007bff;
+    outline: none !important;
+    font-family: 'Staatliches', cursive;
+    font-size: 25px;
+    letter-spacing: 2px;
+    transition: all .2s ease-in-out;
+}
+#admin-hide:hover {
+    color: white;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+#links {
+    background-color: #fefcfe;
+}
+
+#links > div > button {
+    top: 5px;
+    right: 5px;
+}
+
+/* h1 with lines */
+h1 {
+    overflow: hidden;
+    text-align: center;
+    font-size: 2.5em;
+}
+h1:before,
+h1:after {
+    border-bottom: 1px solid #dee2e6;
+    content: "";
+    display: inline-block;
+    height: .1em;
+    position: relative;
+    vertical-align: middle;
+    width: 50%;
+    margin-bottom: .15em;
+}
+h1:before {
+    right: 0.5em;
+    margin-left: -50%;
+}
+h1:after {
+    left: 0.5em;
+    margin-right: -50%;
+}
+
+/* scrollbar */
+body::-webkit-scrollbar { width: 1em; }
+body::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); }
+body::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
