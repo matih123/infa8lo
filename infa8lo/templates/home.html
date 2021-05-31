@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Strona główna - informatyka 8lo</title>
+{% endblock title %}
+
+{% block main %}
+
+	{% block admin %}{% endblock admin %}
+
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4 mt-5">
+					<h1 class="font-teko">Linki</h1>
+					<div class="col-10 offset-1 col-md-8 offset-md-2 offset-lg-0 col-lg-12 w-100 bg-white border mt-4 p-3">
+						<span class="mb-2 d-inline-block text-dark font-noto w-100 ml-2 font-weight-bold">Powiązane strony:</span>
+						<div class="w-100 border rounded-sm shadow-sm font-pangolin font-18" id="links">
+							{% if current_user.is_authenticated %}
+								{% if current_user.userid == "admin8lo" %}
+									{% for link in links %}
+										<div class="position-relative">
+											<a href="{{ link.address }}" target="_blank" class="border-bottom d-inline-block p-2 pl-4 w-100 text-secondary nounderline">
+												{{ link.name }}
+											</a>
+											<button type="button" class="btn btn-danger font-source font-17 pt-1 pb-1 position-absolute" data-toggle="modal" data-target="#deleteLinkConfirm{{ link.id }}">
+												Usuń link
+											</button>
+										</div>
+										<div class="modal fade" id="deleteLinkConfirm{{ link.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteLinkConfirm{{ link.id }}" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+										    		<div class="modal-header">
+										    			<h5 class="modal-title font-noto font-weight-bold text-center" id="deleteLinkConfirmLabel{{ link.id }}">Czy na pewno chcesz usunąć link?</h5>
+									    				<button type="button" class="close" data-dismiss="modal" aria-label="Anuluj">
+									         				<span aria-hidden="true">&times;</span>
+									        			</button>
+										      		</div>
+											      	<div class="modal-footer">
+											        	<button type="button" class="btn btn-secondary font-source font-weight-normal" data-dismiss="modal">Anuluj</button>
+														<form action="{{ url_for('delete_link', link_id=link.id) }}" method="POST">
+															<input type="submit" class="btn btn-danger font-source font-weight-normal" value="Usuń link">
+														</form>
+											      	</div>
+										    	</div>
+										  	</div>
+										</div>
+									{% endfor %}
+								{% else %}
+									{% for link in links %}
+										<a href="{{ link.address }}" target="_blank" class="border-bottom d-inline-block p-2 pl-4 w-100 text-secondary nounderline">{{ link.name }}</a>
+									{% endfor %}
+								{% endif %}
+							{% else %}
+								{% for link in links %}
+									<a href="{{ link.address }}" target="_blank" class="border-bottom d-inline-block p-2 pl-4 w-100 text-secondary nounderline">{{ link.name }}</a>
+								{% endfor %}
+							{% endif %}
+						</div>
+					</div>
+
+					{% block adminLinkForm %}{% endblock adminLinkForm %}
+
+				</div>
+				<div class="col-lg-8 mt-5">
+					<h1 class="font-teko">Posty</h1>
+					{% for post in posts.items %}
+						<div class="bg-white border mt-4 p-3 w-100">
+							<h3 class="font-25 font-source font-weight-bold m-0">{{ post.title }}</h3>
+							<span class="d-inline-block w-100 font-15 font-pangolin">{{ post.created }}</span>
+							<span class="d-inline-block w-100 mt-4 font-noto font-15 break-word">{{ post.content }}</span>
+							{% if current_user.is_authenticated %}
+								{% if current_user.userid == "admin8lo" %}
+									<div style="col-12 w-100">
+										<button type="button" class="btn btn-danger mt-3 font-source" data-toggle="modal" data-target="#deletePostConfirm{{ post.id }}">
+											Usuń post
+										</button>
+										<div class="modal fade" id="deletePostConfirm{{ post.id }}" tabindex="-1" role="dialog" aria-labelledby="deletePostConfirm{{ post.id }}" aria-hidden="true">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+										    		<div class="modal-header">
+										    			<h5 class="modal-title font-noto font-weight-bold text-center" id="deletePostConfirmLabel{{ post.id }}">Czy na pewno chcesz usunąć post?</h5>
+									    				<button type="button" class="close" data-dismiss="modal" aria-label="Anuluj">
+									         				<span aria-hidden="true">&times;</span>
+									        			</button>
+										      		</div>
+											      	<div class="modal-footer">
+											        	<button type="button" class="btn btn-secondary font-source font-weight-normal" data-dismiss="modal">Anuluj</button>
+														<form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+															<input type="submit" class="btn btn-danger font-source font-weight-normal" value="Usuń post">
+														</form>
+											      	</div>
+										    	</div>
+										  	</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endif %}
+						</div>
+					{% endfor %}
+
+					{% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+						{% if page_num %}
+							{% if posts.page == page_num %}
+								<a href="{{ url_for('home', strona=page_num) }}" class="btn btn-dark btn-sm mt-3">{{ page_num }}</a>
+							{% else %}
+								<a href="{{ url_for('home', strona=page_num) }}" class="btn btn-secondary btn-sm mt-3">{{ page_num }}</a>
+							{% endif %}
+						{% else %}
+							...
+						{% endif %}
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</main>
+{% endblock main %}

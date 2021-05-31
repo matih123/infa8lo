@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>Konto - informatyka 8lo</title>
+{% endblock title %}
+
+{% block main %}
+	<main>
+		<div class="container mt-5">
+			<h1 class="font-teko">Konto</h1>
+		</div>
+
+		<div class="container">
+			<div class="container border bg-white p-4">
+				<div class="row">
+					<div class="col-10 offset-1 offset-md-0 col-md-4 text-center font-staatliches">
+						<h3 class="d-inline-block font-25 w-75 bg-black text-white p-2 font-noto">{{ current_user.userid }}</h3>
+						<h3 class="d-inline-block font-25 w-75 bg-black text-white p-2 font-noto">kl. {{ current_user.grade }}</h3>
+						<a href="{{ url_for('logout') }}" class="btn btn-outline-black font-25 p-2 w-75 mt-3">Wyloguj się</a>
+						<a href="https://user.infa8lo.pl/{{ current_user.grade }}/{{ current_user.userid }}" class="btn btn-outline-black font-25 p-2 w-75 mt-2" target="_blank">Moja strona</a>
+						<button onclick="showChangePassForm()" class="btn btn-outline-black font-25 p-2 w-75 mt-2 bg-white">Zmień hasło</button>
+						<button onclick="showCreateDatabaseForm()" class="btn btn-outline-black font-25 p-2 w-75 mt-2 bg-white">Baza danych</button>
+					</div>
+
+					<div class="col-10 offset-1 offset-md-0 col-md-8 pr-0 pl-0 pr-md-5 font-baloo font-20 mt-4" id="changePassForm">
+						<form method="POST" action="">
+							{{ pass_form.hidden_tag() }}
+							<div class="form-group row pr-lg-4">
+								{{ pass_form.old_password.label(class="col-lg-6") }}
+
+								{% if pass_form.old_password.errors %}
+									{{ pass_form.old_password(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in pass_form.old_password.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ pass_form.old_password(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row pr-lg-4">
+								{{ pass_form.password.label(class="col-lg-6") }}
+
+								{% if pass_form.password.errors %}
+									{{ pass_form.password(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in pass_form.password.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ pass_form.password(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row pr-lg-4">
+								{{ pass_form.confirm_password.label(class="col-lg-6") }}
+
+								{% if pass_form.confirm_password.errors %}
+									{{ pass_form.confirm_password(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in pass_form.confirm_password.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ pass_form.confirm_password(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row m-0 mt-4">
+								{{ pass_form.submit(class="btn-submit p-2 col-lg-4 offset-lg-4 font-staatliches") }}
+							</div>
+						</form>
+					</div>
+
+					{% if not user_has_db %}
+					<div class="col-10 offset-1 offset-md-0 col-md-8 pr-0 pl-0 pr-md-5 font-baloo font-20 mt-4" id="dbForm">
+						<form method="POST" action="">
+							{{ createdb_form.hidden_tag() }}
+							<div class="form-group row pr-lg-4">
+								{{ createdb_form.db_password.label(class="col-lg-6") }}
+
+								{% if createdb_form.db_password.errors %}
+									{{ createdb_form.db_password(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in createdb_form.db_password.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ createdb_form.db_password(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row pr-lg-4">
+								{{ createdb_form.db_confirm_password.label(class="col-lg-6") }}
+
+								{% if createdb_form.db_confirm_password.errors %}
+									{{ createdb_form.db_confirm_password(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in createdb_form.db_confirm_password.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ createdb_form.db_confirm_password(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row m-0 mt-4">
+								{{ createdb_form.db_submit(class="btn-submit p-2 col-lg-4 offset-lg-4 font-staatliches") }}
+							</div>
+						</form>
+					</div>
+					{% else %}
+					<div class="col-10 offset-1 offset-md-0 col-md-8 pr-0 pl-0 pr-md-5 font-baloo font-20 mt-2" id="dbForm">
+
+						<div class="col-12">
+							<div class="row pt-4">
+								<div class="col-6">
+									<span>Zaloguj się do bazy danych:</span>
+								</div>
+								<div class="col-6 text-center">
+									<a href="https://phpmyadmin.infa8lo.pl" target="_blank" class="text-dark">phpmyadmin - link</a>
+								</div>
+							</div>
+							<div class="row pt-4">
+								<div class="col-6">
+									<span>Nazwa użytkownika:</span>
+								</div>
+								<div class="col-6 text-center">
+									<span class="font-noto font-18 font-weight-bold font-italic">{{ current_user.userid }}</span>
+								</div>								
+							</div>
+							<div class="row pt-4">
+								<div class="col-6">
+									<span>Hasło:</span>
+								</div>
+								<div class="col-6 text-center p-0">
+									<span class="font-noto font-18 font-weight-bold font-italic">[hasło podane przy tworzeniu bazy]</span>
+								</div>								
+							</div>
+							<div class="row pt-4">
+								<div class="col-6">
+									<span>Adres serwera:</span>
+								</div>
+								<div class="col-6 text-center">
+									<span class="font-noto font-18 font-weight-bold font-italic">localhost</span>
+								</div>								
+							</div>
+							<div class="row pt-4">
+								<div class="col-6">
+									<span>Nazwa bazy danych:</span>
+								</div>
+								<div class="col-6 text-center">
+									<span class="font-noto font-18 font-weight-bold font-italic">baza_{{ current_user.userid }}</span>
+								</div>								
+							</div>
+							<div class="row pt-4">
+								<div class="col-6">
+									<span>[PHP] Jak połączyć się z bazą?</span>
+								</div>
+								<div class="col-6 text-center">
+									<a href="https://pasja-informatyki.pl/programowanie-webowe/php-mysqli-dane-dostepowe-do-bazy/" target="_blank" class="text-dark">pasja-informatyki - link</a>
+								</div>								
+							</div>
+						</div>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+	</main>
+
+	<script type="text/javascript">
+		function showChangePassForm() {
+			if ($("#changePassForm").css('display') == 'none') {
+				$("#dbForm").css('display', 'none');
+				$("#changePassForm").fadeIn(500);
+				sessionStorage.setItem("changePassForm", "true");
+				sessionStorage.setItem("dbForm", "false");
+			}
+			else {
+				$("#changePassForm").fadeOut(500);
+				sessionStorage.setItem("changePassForm", "false");
+			}
+		} 
+
+		function showCreateDatabaseForm() {
+			if ($("#dbForm").css('display') == 'none') {
+				$("#changePassForm").css('display', 'none');
+				$("#dbForm").fadeIn(500);
+				sessionStorage.setItem("dbForm", "true");
+				sessionStorage.setItem("changePassForm", "false");
+			}
+			else {
+				$("#dbForm").fadeOut(500);
+				sessionStorage.setItem("dbForm", "false");
+			}
+		}
+
+		if (sessionStorage.getItem("changePassForm") == "true") {
+			$("#changePassForm").fadeIn(500);
+		}
+		else if (sessionStorage.getItem("dbForm") == "true") {
+			$("#dbForm").fadeIn(500);
+		}
+	</script>
+
+{% endblock main %}

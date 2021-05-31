@@ -1,0 +1,248 @@
+{% extends "home.html" %}
+
+{% block admin %}
+	{% if current_user.is_authenticated %}
+		{% if current_user.userid == "admin8lo" %}
+			<div class="container-fluid position-fixed p-0" id="admin-panel">
+				<div class="row">
+					<div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4 bg-dark p-0" id="admin-navigation">
+						<h3 class="font-staatliches font-35 p-0 pt-3">Admin</h3>
+						<div>
+							<img src="{{ url_for('static', filename='img/icons/post.png') }}" />
+							<button onclick='showForm("postForm")' class="bg-dark">Dodaj post</button>
+						</div>
+						<div>
+							<img src="{{ url_for('static', filename='img/icons/settings.png') }}" />
+							<button onclick='showForm("configForm")' class="bg-dark">Edytuj konfiguracje</button>
+						</div>
+						<div>
+							<img src="{{ url_for('static', filename='img/icons/password.png') }}" />
+							<button onclick='showForm("passwordForm")' class="bg-dark">Resetuj hasło użytkownika</button>
+						</div>
+						<div>
+							<img src="{{ url_for('static', filename='img/icons/todo.png') }}" />
+							<button onclick='showForm("todoForm")' class="bg-dark">Do zrobienia</button>
+						</div>
+						<div>
+							<img src="{{ url_for('static', filename='img/icons/phpmyadmin.png') }}" />
+							<a href="https://phpmyadmin.infa8lo.pl" target="_blank" class="bg-dark nounderline pl-2">Bazy danych (phpmyadmin)</a>
+						</div>
+						<div>
+							<img src="{{ url_for('static', filename='img/icons/admin.png') }}" />
+							<a href="https://admin.infa8lo.pl" target="_blank" class="bg-dark nounderline pl-2">Strona administratora</a>
+						</div>
+						<div>
+							<img src="{{ url_for('static', filename='img/icons/restart.png') }}" />
+							<a href="{{ url_for('restart_apache') }}" class="bg-dark nounderline pl-2" target="_blank">Restart apache</a>
+						</div>
+						<button onclick="hideAdminPanel();" id="admin-hide">Ukryj panel</button>
+					</div>
+					<div class="d-none d-sm-block col-sm-4 col-md-6 col-lg-7 col-xl-8 bg-black" id="admin-shadow" onclick="hideAdminPanel();"></div>
+				</div>
+			</div>
+
+			<div class="container" id="postForm">
+				<div class="row p-3">
+					<div class="col-12 w-100 border bg-white font-20 font-baloo p-4">
+						<form method="POST" action="">
+							{{ post_form.hidden_tag() }}
+							<div class="form-group row pr-lg-4">
+								{{ post_form.title.label(class="col-lg-6") }}
+
+								{% if post_form.title.errors %}
+									{{ post_form.title(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in post_form.title.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ post_form.title(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row pr-lg-4">
+								{{ post_form.content.label(class="col-lg-6") }}
+
+								{% if post_form.content.errors %}
+									{{ post_form.content(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in post_form.content.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ post_form.content(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row m-0 mt-4">
+								{{ post_form.post_submit(class="btn-submit p-2 col-lg-4 offset-lg-4 font-staatliches") }}
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="container" id="configForm">
+				<div class="row p-3">
+					<div class="col-12 w-100 border bg-white font-20 font-baloo p-4">
+						<form method="POST" action="">
+							{{ config_form.hidden_tag() }}
+							<div class="form-check row font-20 d-table-row">
+								{{ config_form.login(class="m-0 d-table-cell ml-3") }}
+								{{ config_form.login.label(class="m-0 pl-2 d-table-cell") }}
+							</div>
+							<div class="form-check row font-20 d-table-row">
+								{{ config_form.register(class="m-0 d-table-cell ml-3") }}
+								{{ config_form.register.label(class="m-0 pl-2 d-table-cell") }}
+							</div>
+							<div class="form-group row m-0 mt-4">
+								{{ config_form.config_submit(class="btn-submit p-2 col-lg-4 offset-lg-4 font-staatliches") }}
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="container" id="passwordForm">
+				<div class="row p-3">
+					<div class="col-12 w-100 border bg-white font-20 font-baloo p-4">
+						<form method="POST" action="">
+							{{ password_form.hidden_tag() }}
+							<div class="form-group row pr-lg-4">
+								{{ password_form.username.label(class="col-lg-6") }}
+
+								{% if password_form.username.errors %}
+									{{ password_form.username(class="col-lg-6 font-pangolin border bg-light invalid") }}
+									{% for error in password_form.username.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ password_form.username(class="col-lg-6 font-pangolin border bg-light") }}
+								{% endif %}
+							</div>
+							<div class="form-group row m-0 mt-4">
+								<button type="button" class="btn-submit p-2 col-lg-4 offset-lg-4 font-staatliches" data-toggle="modal" data-target="#resetPasswordConfirm">
+									Resetuj hasło
+								</button>
+								<div class="modal fade" id="resetPasswordConfirm" tabindex="-1" role="dialog" aria-labelledby="resetPasswordConfirm" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+								    		<div class="modal-header">
+								    			<h5 class="modal-title font-noto font-weight-bold" id="resetPasswordConfirmLabel">Czy na pewno chcesz zresetować hasło?</h5>
+							    				<button type="button" class="close" data-dismiss="modal" aria-label="Anuluj">
+							         				<span aria-hidden="true">&times;</span>
+							        			</button>
+								      		</div>
+									      	<div class="modal-footer">
+									        	<button type="button" class="btn btn-secondary font-source font-weight-normal" data-dismiss="modal">Anuluj</button>
+												{{ password_form.password_submit(class="btn btn-danger font-source font-weight-normal") }}
+									      	</div>
+								    	</div>
+								  	</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="container" id="todoForm">
+				<div class="row p-3">
+					<div class="col-12 w-100 border bg-white font-20 font-baloo p-4">
+						<form method="POST" action="">
+							{{ todo_form.hidden_tag() }}
+							<div class="form-group">
+								{{ todo_form.todo_content.label(class="col-lg-12 p-0") }}
+
+								{% if todo_form.todo_content.errors %}
+									{{ todo_form.todo_content(class="col-lg-12 font-pangolin border bg-light invalid w-100 todo-textarea") }}
+									{% for error in todo_form.todo_content.errors %}
+										<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+									{% endfor %}
+								{% else %}
+									{{ todo_form.todo_content(class="col-lg-12 font-pangolin border bg-light w-100 todo-textarea") }}
+								{% endif %}
+							</div>
+							<div class="form-group row m-0 mt-4">
+								{{ todo_form.todo_submit(class="btn-submit p-2 col-lg-4 offset-lg-4 font-staatliches") }}
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<script type="text/javascript">
+				var forms = ['postForm', 'configForm', 'passwordForm', 'todoForm'];
+
+				function closeForms() {
+					for(let i = 0; i < forms.length; i++) {
+						form = "#" + forms[i];
+						$(form).css('display', 'none');
+						sessionStorage.setItem(form, "false");
+					}
+				}
+
+				function showForm(form) {
+					form = "#" + form
+					if ($(form).css('display') == 'none') {
+						closeForms();
+						$(form).fadeIn(500);
+						sessionStorage.setItem(form, "true");
+					}
+					else { closeForms(); }
+				}
+
+				for(let j = 0; j < forms.length; j++) {
+					if (sessionStorage.getItem("#" + forms[j]) == "true") {
+						$("#" + forms[j]).css('display', 'block');
+					}
+				}
+
+				function showAdminPanel() {
+					$("#admin-panel").fadeIn(1000);
+				}
+
+				function hideAdminPanel() {
+					$("#admin-panel").fadeOut(500);
+				}
+			</script>
+		{% endif %}
+	{% endif %}
+{% endblock admin %}
+
+{% block adminLinkForm %}
+
+<div class="container mt-3" id="linkForm">
+	<div class="row p-4 border bg-white">
+		<div class="col-12 w-100 font-20 font-baloo">
+			<form method="POST" action="">
+				{{ link_form.hidden_tag() }}
+				<div class="form-group row pr-lg-4">
+					{{ link_form.name.label(class="col-lg-6") }}
+
+					{% if link_form.name.errors %}
+						{{ link_form.name(class="col-lg-6 font-pangolin border bg-light invalid") }}
+						{% for error in link_form.name.errors %}
+							<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+						{% endfor %}
+					{% else %}
+						{{ link_form.name(class="col-lg-6 font-pangolin border bg-light") }}
+					{% endif %}
+				</div>
+				<div class="form-group row pr-lg-4">
+					{{ link_form.address.label(class="col-lg-6") }}
+
+					{% if link_form.address.errors %}
+						{{ link_form.address(class="col-lg-6 font-pangolin border bg-light invalid") }}
+						{% for error in link_form.address.errors %}
+							<span class="text-danger font-source font-18 w-100 d-inline-block ml-3 font-weight-bold">{{ error }}</span>
+						{% endfor %}
+					{% else %}
+						{{ link_form.address(class="col-lg-6 font-pangolin border bg-light") }}
+					{% endif %}
+				</div>
+				<div class="form-group row m-0 mt-4">
+					{{ link_form.link_submit(class="btn-submit p-2 col-lg-6 offset-lg-3 font-staatliches") }}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock adminLinkForm %}
