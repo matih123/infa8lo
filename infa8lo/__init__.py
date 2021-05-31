@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 import json
 
-with open('D:\\Programowanie\\Projekty\\Flask\\infa8lo\\config.json') as config_file:
+with open('config//file//path') as config_file:
 	config = json.load(config_file)
 
 app = Flask(__name__)
