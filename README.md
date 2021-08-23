@@ -1,6 +1,5 @@
 ## infa8lo
-Flask app made for high school.
-It manages users and their files. 
+Flask app made for high school. It manages users, their files and databases.
 
 Every user can:
 * access files through ftp,
